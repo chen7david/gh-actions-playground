@@ -1,6 +1,7 @@
 on:
   push:
-    branches: -main
+    branches:
+      - main
 jobs:
   print_hello:
     runs-on: ubuntu-lastest
