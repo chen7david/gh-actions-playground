@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import {
   Button,
@@ -11,6 +11,7 @@ import {
   Alert,
   Card,
   Divider,
+  Input,
 } from "antd";
 const { Header, Footer, Content, Sider } = Layout;
 import Icon, {
@@ -24,6 +25,17 @@ import Icon, {
 
 function App() {
   const [collapsed, setCollapsed] = useState(false);
+  const [textArea, setTextArea] = useState<string>();
+
+  const tokenizeString = (string: string): string[] => {
+    const tokens = string.toLowerCase().match(/\w(?<!\d)[\w'-]*/g);
+    const uniqueTokens = new Set(tokens);
+    return [...uniqueTokens];
+  };
+
+  const tokenListToString = (tokenList: string[]) => {
+    return tokenList.join("\n");
+  };
 
   return (
     <>
@@ -81,9 +93,25 @@ function App() {
                 xl={8}
                 span={6}
                 flex="number"
-                style={{ minHeight: "40vh", background: "#90EE90" }}
+                style={{
+                  minHeight: "40vh",
+                  background: "#90EE90",
+                  padding: "5px",
+                }}
               >
-                col-1
+                <Input.TextArea
+                  rows={4}
+                  onKeyUp={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                    const inputText = (e.target as HTMLTextAreaElement).value;
+                    tokenizeString(inputText);
+                    setTextArea(inputText);
+                    console.log({ inputText });
+                  }}
+                />
+                <Input.TextArea
+                  rows={4}
+                  value={tokenListToString(tokenizeString(textArea || ""))}
+                />
               </Col>
               <Col
                 xs={24}
